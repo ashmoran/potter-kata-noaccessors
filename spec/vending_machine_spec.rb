@@ -11,8 +11,8 @@ class VendingMachine
     end
   end
 
-  def initialize(dispenser, options)
-    @dispenser = dispenser
+  def initialize(options)
+    @dispenser = options[:dispenser]
     @items = options[:items]
   end
 
@@ -28,7 +28,7 @@ end
 describe VendingMachine do
   context "multiple items, no charge, stock unlimited" do
     let(:dispenser) { double("Dispenser", release_item: nil) }
-    subject(:vending_machine) { VendingMachine.new(dispenser, items: [:crisps, :cola]) }
+    subject(:vending_machine) { VendingMachine.new(dispenser: dispenser, items: [:crisps, :cola]) }
 
     context "known items" do
       it "vends the requested item" do
