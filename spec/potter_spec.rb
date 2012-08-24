@@ -3,10 +3,11 @@ require 'spec_helper'
 class Checkout
   def initialize(display)
     @display = display
+    @total = 0
   end
   
   def scan(barcode)
-    @total = 8
+    @total += 8
   end
 
   def total_items
@@ -15,22 +16,31 @@ class Checkout
 end
 
 describe "Potter" do
+  subject(:checkout) { Checkout.new(self) }
+
+  # Display interface
+  def show_total(total)
+    @total = total
+  end
+
+  def total
+    @total
+  end
+
   context "one book" do
-    subject(:checkout) { Checkout.new(self) }
-
-    # Display interface
-    def show_total(total)
-      @total = total
-    end
-
-    def total
-      @total
-    end
-
     it "is standard price" do
       checkout.scan("A")
       checkout.total_items
       total.should be == 8
+    end
+  end
+  
+  context "two different books" do
+    it "is standard price" do
+      checkout.scan("A")
+      checkout.scan("B")
+      checkout.total_items
+      total.should be == 16
     end
   end
 end
