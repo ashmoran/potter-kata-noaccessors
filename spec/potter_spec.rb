@@ -35,10 +35,10 @@ describe "Potter" do
     end
   end
   
-  context "two different books" do
+  context "two same books" do
     it "is standard price" do
       checkout.scan("A")
-      checkout.scan("B")
+      checkout.scan("A")
       checkout.total_items
       total.should be == 16
     end
