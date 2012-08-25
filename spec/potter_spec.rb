@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 class Checkout
-  def initialize(receipt)
-    # @special_offers = special_offers
+  def initialize(receipt, special_offers)
     @receipt = receipt
+    @special_offers = special_offers
     @total = 0
   end
   
   def scan(barcode)
-    # @special_offers.item_scanned(barcode)
+    @special_offers.remember_item(barcode)
     @total += 8
   end
 
@@ -19,7 +19,8 @@ end
 
 describe "Potter" do
   let(:receipt) { mock("Receipt", print_total: nil) }
-  subject(:checkout) { Checkout.new(receipt) }
+  let(:special_offers) { mock("SpecialOffers", remember_item: nil) }
+  subject(:checkout) { Checkout.new(receipt, special_offers) }
 
   # # SpecialOffers interface
   # before(:each) do
@@ -52,13 +53,14 @@ describe "Potter" do
     end
   end
 
-  # context "two different books" do
-  #   it "informs the SpecialOffers" do
-  #     checkout.scan("A")
-  #     checkout.scan("B")
+  context "two different books" do
+    it "informs the SpecialOffers" do
+      special_offers.should_receive(:remember_item).with("A")
+      special_offers.should_receive(:remember_item).with("B")
 
-  #     special_offers_scanned_items.should be == %w[ A B ]
-  #   end
+      checkout.scan("A")
+      checkout.scan("B")
+    end
 
   #   it "applies discounts" do
   #     checkout.scan("A")
@@ -74,5 +76,5 @@ describe "Potter" do
 
   #     total.should be == 14.4
   #   end
-  # end
+  end
 end
