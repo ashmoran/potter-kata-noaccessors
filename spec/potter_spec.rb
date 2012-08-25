@@ -4,64 +4,50 @@ class Checkout
   def initialize(receipt, special_offers)
     @receipt = receipt
     @special_offers = special_offers
-    @total = 0
   end
-  
+
   def scan(barcode)
+    @receipt.record_item(barcode)
     @special_offers.remember_item(barcode)
-    @total += 8
   end
 
   def total_items
-    @receipt.print_total(@total)
+    @special_offers.apply_discounts(@receipt)
+    @receipt.print_total
   end
 end
 
-describe "Potter" do
-  let(:receipt) { mock("Receipt", print_total: nil) }
-  let(:special_offers) { mock("SpecialOffers", remember_item: nil) }
+describe Checkout do
+  let(:receipt) {
+    mock("Receipt", print_total: nil, record_item: nil)
+  }
+  let(:special_offers) {
+    mock("SpecialOffers", remember_item: nil, apply_discounts: nil)
+  }
+
   subject(:checkout) { Checkout.new(receipt, special_offers) }
 
-  context "one book" do
-    it "is standard price" do
+  describe "scanning" do
+    it "informs the Receipt" do
+      receipt.should_receive(:record_item).with("A")
       checkout.scan("A")
-      receipt.should_receive(:print_total).with(8)
-      checkout.total_items
     end
-  end
 
-  context "two same books" do
-    it "is standard price" do
-      checkout.scan("A")
-      checkout.scan("A")
-      checkout.total_items
-      receipt.should_receive(:print_total).with(16)
-      checkout.total_items
-    end
-  end
-
-  context "two different books" do
     it "informs the SpecialOffers" do
       special_offers.should_receive(:remember_item).with("A")
-      special_offers.should_receive(:remember_item).with("B")
-
       checkout.scan("A")
-      checkout.scan("B")
+    end
+  end
+
+  describe "totalling" do
+    it "applies discounts" do
+      special_offers.should_receive(:apply_discounts).with(receipt)
+      checkout.total_items
     end
 
-  #   it "applies discounts" do
-  #     checkout.scan("A")
-  #     checkout.scan("B")
-
-  #     checkout.total_items
-  #   end
-
-  #   it "has a 10% discount" do
-  #     checkout.scan("A")
-  #     checkout.scan("B")
-  #     checkout.total_items
-
-  #     total.should be == 14.4
-  #   end
+    it "prints the total" do
+      receipt.should_receive(:print_total)
+      checkout.total_items
+    end
   end
-end
+ end
