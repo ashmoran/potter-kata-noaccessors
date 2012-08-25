@@ -34,15 +34,6 @@ describe "Potter" do
   #   @special_offers_scanned_items
   # end
 
-  # # Display interface
-  # def show_total(total)
-  #   @total = total
-  # end
-
-  # def total
-  #   @total
-  # end
-
   context "one book" do
     it "is standard price" do
       checkout.scan("A")
