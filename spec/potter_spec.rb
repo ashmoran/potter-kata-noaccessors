@@ -22,19 +22,6 @@ describe "Potter" do
   let(:special_offers) { mock("SpecialOffers", remember_item: nil) }
   subject(:checkout) { Checkout.new(receipt, special_offers) }
 
-  # # SpecialOffers interface
-  # before(:each) do
-  #   @special_offers_scanned_items = [ ]
-  # end
-
-  # def item_scanned(barcode)
-  #   @special_offers_scanned_items << barcode
-  # end
-
-  # def special_offers_scanned_items
-  #   @special_offers_scanned_items
-  # end
-
   context "one book" do
     it "is standard price" do
       checkout.scan("A")
