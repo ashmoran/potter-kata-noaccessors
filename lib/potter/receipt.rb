@@ -4,8 +4,8 @@ class Receipt
     @total = 0
   end
 
-  def record_item(barcode)
-    @total += 8
+  def record_item(barcode, price = 8)
+    @total += price
   end
 
   def print_total

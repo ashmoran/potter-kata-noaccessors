@@ -12,6 +12,12 @@ describe "Potter" do
     customer.buy_books(%w[ A A ], from_shop: shop)
   end
 
+  it "applies discounts" do
+    # TODO: this should not me a message expectation
+    customer.should_receive(:your_price_to_pay_is).with(15.2)
+    customer.buy_books(%w[ A B ], from_shop: shop)
+  end
+
   it "answers the kata example", pending: true do
     customer.should_receive(:your_price_to_pay_is).with(52.20)
     customer.buy_books(%w[ A A B B C C D E], from_shop: shop)

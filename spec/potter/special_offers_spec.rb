@@ -22,5 +22,15 @@ describe SpecialOffers do
         special_offers.apply_discounts(receipt)
       end
     end
+
+    context "two different books" do
+      it "applies a 5% discount" do
+        special_offers.remember_item("A")
+        special_offers.remember_item("B")
+
+        receipt.should_receive(:record_item).with("Two book set", -0.8)
+        special_offers.apply_discounts(receipt)
+      end
+    end
   end
 end
