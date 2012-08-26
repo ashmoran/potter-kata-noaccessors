@@ -17,34 +17,3 @@ class Customer
       sell_me_these_books(barcodes)
   end
 end
-
-class CheckoutAssistant
-  def initialize(checkout)
-    @checkout = checkout
-  end
-
-  def sell_me_these_books(barcodes)
-    barcodes.each do |barcode|
-      @checkout.scan(barcode)
-    end
-
-    @checkout.total_items
-  end
-end
-
-class Checkout
-  def initialize(receipt, special_offers)
-    @receipt = receipt
-    @special_offers = special_offers
-  end
-
-  def scan(barcode)
-    @receipt.record_item(barcode)
-    @special_offers.remember_item(barcode)
-  end
-
-  def total_items
-    @special_offers.apply_discounts(@receipt)
-    @receipt.print_total
-  end
-end

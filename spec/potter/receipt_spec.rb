@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 require 'potter/receipt'
-require 'potter/customer'
+require 'potter/checkout'
 
 describe Receipt do
   let(:customer) { mock(Customer, your_price_to_pay_is: nil) }
