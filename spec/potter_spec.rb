@@ -60,12 +60,6 @@ describe PotterShop do
     # TODO: this should not me a message expectation
     customer.should_receive(:your_price_to_pay_is).with(16)
   end
-
-  # describe "#sell" do
-  #   it "makes a receipt" do
-  #     Receipt.should_receive(:new).with(customer)
-  #   end
-  # end
 end
 
 describe Customer do
