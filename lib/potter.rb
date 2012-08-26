@@ -1,3 +1,5 @@
+require 'potter/special_offers'
+
 class PotterShop
   def find_a_checkout_assitant_to_sell(options)
     customer        = options[:to_customer]
@@ -59,15 +61,5 @@ class Receipt
 
   def print_total
     @customer.your_price_to_pay_is(@total)
-  end
-end
-
-class SpecialOffers
-  def remember_item(barcode)
-    
-  end
-
-  def apply_discounts(barcode)
-    
   end
 end
