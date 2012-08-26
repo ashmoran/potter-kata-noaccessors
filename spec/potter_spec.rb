@@ -1,17 +1,34 @@
 require 'spec_helper'
 
 class PotterShop
-  def sell(barcodes, options)
+  def find_a_checkout_assitant_to_sell(options)
     customer        = options[:to_customer]
     receipt         = Receipt.new(customer)
     special_offers  = SpecialOffers.new
     checkout        = Checkout.new(receipt, special_offers)
+    CheckoutAssistant.new(checkout)
   end
 end
 
 class Customer
   def buy_books(barcodes, options)
-    options[:from_shop].sell(barcodes, to_customer: self)
+    options[:from_shop].
+      find_a_checkout_assitant_to_sell(to_customer: self).
+      sell_me_these_books(barcodes)
+  end
+end
+
+class CheckoutAssistant
+  def initialize(checkout)
+    @checkout = checkout
+  end
+
+  def sell_me_these_books(barcodes)
+    barcodes.each do |barcode|
+      @checkout.scan(barcode)
+    end
+
+    @checkout.total_items
   end
 end
 
@@ -48,27 +65,47 @@ class Receipt
 end
 
 class SpecialOffers
-  
+  def remember_item(barcode)
+    
+  end
+
+  def apply_discounts(barcode)
+    
+  end
 end
 
 describe PotterShop do
   let(:customer) { Customer.new }
   subject(:shop) { PotterShop.new }
 
-  it "tells the customer what they owe", pending: true do
-    customer.buy_books(%w[ A A ], from_shop: shop)
+  describe "#find_a_checkout_assitant_to_sell" do
+    it "builds a CheckoutAssistant" do
+      shop.
+        find_a_checkout_assitant_to_sell(to_customer: customer).
+        should be_a(CheckoutAssistant)
+    end
+  end
+
+  it "tells the customer what they owe" do
     # TODO: this should not me a message expectation
     customer.should_receive(:your_price_to_pay_is).with(16)
+    customer.buy_books(%w[ A A ], from_shop: shop)
   end
 end
 
 describe Customer do
-  let(:shop) { mock(PotterShop) }
+  let(:checkout_assistant) { mock(CheckoutAssistant, sell_me_these_books: nil) }
+  let(:shop) { mock(PotterShop, find_a_checkout_assitant_to_sell: checkout_assistant) }
   subject(:customer) { Customer.new }
 
   describe "#buy_books" do
-    it "asks the shop for the books" do
-      shop.should_receive(:sell).with(%w[ A A ], to_customer: customer)
+    it "finds a CheckoutAssistant" do
+      shop.should_receive(:find_a_checkout_assitant_to_sell).with(to_customer: customer)
+      customer.buy_books(%w[ A A ], from_shop: shop)
+    end
+
+    it "asks to buy the books" do
+      checkout_assistant.should_receive(:sell_me_these_books).with(%w[ A A ])
       customer.buy_books(%w[ A A ], from_shop: shop)
     end
   end
@@ -109,6 +146,25 @@ describe Checkout do
   end
 end
 
+describe CheckoutAssistant do
+  let(:checkout) { mock(Checkout, scan: nil, total_items: nil) }
+  subject(:checkout_assistant) { CheckoutAssistant.new(checkout) }
+
+  describe "#sell_me_these_books" do
+    it "scans all the items" do
+      checkout.should_receive(:scan).with("A")
+      checkout.should_receive(:scan).with("B")
+
+      checkout_assistant.sell_me_these_books(%w[ A B ])
+    end
+
+    it "asks for the total" do
+      checkout.should_receive(:total_items)
+      checkout_assistant.sell_me_these_books(%w[ A B ])
+    end
+  end
+end
+
 describe Receipt do
   let(:customer) { mock(Customer, your_price_to_pay_is: nil) }
   subject(:receipt) { Receipt.new(customer) }
@@ -120,6 +176,30 @@ describe Receipt do
 
       customer.should_receive(:your_price_to_pay_is).with(16)
       receipt.print_total
+    end
+  end
+end
+
+describe SpecialOffers do
+  subject(:special_offers) { SpecialOffers.new }
+  describe "#remember_item" do
+    it "doesn't throw an error" do
+      special_offers.remember_item("A")
+    end
+
+    it "does something useful" do
+      pending
+    end
+  end
+
+  describe "#apply_discounts" do
+    let(:receipt) { mock(Receipt) }
+    it "doesn't throw an error" do
+      special_offers.apply_discounts(receipt)
+    end
+
+    it "does something useful" do
+      pending
     end
   end
 end
