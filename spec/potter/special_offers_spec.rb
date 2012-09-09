@@ -106,8 +106,8 @@ describe SpecialOffers do
         special_offers.remember_item("C")
         special_offers.remember_item("D")
 
+        special_offers.remember_item("C")
         special_offers.remember_item("D")
-        special_offers.remember_item("E")
 
         receipt.should_receive(:record_item).with("4 book set", BigDecimal.new("-6.4"))
         receipt.should_receive(:record_item).with("3 book set", BigDecimal.new("-2.4"))
