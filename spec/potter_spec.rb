@@ -18,9 +18,31 @@ describe "Potter" do
     customer.buy_books(%w[ A B ], from_shop: shop)
   end
 
-  it "answers the kata example" do
-    # TODO: this should not be a message expectation
-    customer.should_receive(:your_price_to_pay_is).with(BigDecimal.new("52.20"))
-    customer.buy_books(%w[ A A B B C C D E ], from_shop: shop)
+  context "the kata edge case example" do
+    let(:paper) { StringIO.new }
+
+    it "answers the kata example" do
+      # TODO: this should not be a message expectation
+      customer.should_receive(:your_price_to_pay_is).with(BigDecimal.new("52.20"))
+      customer.buy_books(%w[ A A B B C C D E ], from_shop: shop)
+    end
+
+    it "answers the kata example" do
+      customer.buy_books(%w[ A A B B C C D E ], from_shop: shop, get_receipt_printed_to: paper)
+
+      paper.string.chomp.should be == -<<-RECEIPT
+        A - 8
+        A - 8
+        B - 8
+        B - 8
+        C - 8
+        C - 8
+        D - 8
+        E - 8
+        5 book set - -10
+        4 book set - -6.4
+        Total: 52.20
+      RECEIPT
+    end
   end
 end

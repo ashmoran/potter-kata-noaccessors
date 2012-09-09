@@ -1,9 +1,9 @@
 require 'devnull'
 
 class Receipt
-  def initialize(customer, paper = nil)
+  def initialize(customer, paper = DevNull.new)
     @customer = customer
-    @paper = paper || DevNull.new
+    @paper = paper
     @total = 0
   end
 

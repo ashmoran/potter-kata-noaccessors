@@ -43,15 +43,4 @@ describe Receipt do
       RECEIPT
     end
   end
-
-  context "nil paper is given" do
-    subject(:receipt) { Receipt.new(customer, nil) }
-
-    it "doesn't raise an error, because client code currently passes nil sometimes" do
-      expect {
-        receipt.record_item("BAR")
-        receipt.print_total
-      }.to_not raise_error
-    end
-  end
 end
