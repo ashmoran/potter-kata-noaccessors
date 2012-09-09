@@ -30,6 +30,8 @@ describe "Potter" do
     it "answers the kata example" do
       customer.buy_books(%w[ A A B B C C D E ], from_shop: shop, get_receipt_printed_on: paper)
 
+      puts paper.string
+
       paper.string.chomp.should be == -<<-RECEIPT
         A - 8
         A - 8
@@ -40,7 +42,7 @@ describe "Potter" do
         D - 8
         E - 8
         5 book set - -10
-        4 book set - -6.4
+        3 book set - -2.4
         Total: 52.20
       RECEIPT
     end
