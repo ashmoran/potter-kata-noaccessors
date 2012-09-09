@@ -11,8 +11,9 @@ describe PotterShop do
   describe "#find_a_checkout_assitant_to_sell" do
     it "builds a CheckoutAssistant" do
       shop.
-        find_a_checkout_assitant_to_sell(to_customer: customer).
-        should be_a(CheckoutAssistant)
+        find_a_checkout_assitant_to_sell(
+        	to_customer: customer, printing_receipt_to: StringIO.new
+        ).should be_a(CheckoutAssistant)
     end
   end
 end

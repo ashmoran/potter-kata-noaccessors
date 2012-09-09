@@ -7,7 +7,7 @@ class PotterShop
   def find_a_checkout_assitant_to_sell(options)
     CheckoutAssistant.new(
       Checkout.new(
-        Receipt.new(options[:to_customer]),
+        Receipt.new(options[:to_customer], options[:printing_receipt_to]),
         SpecialOffers.new
       )
     )
