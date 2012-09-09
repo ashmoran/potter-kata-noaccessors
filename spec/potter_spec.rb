@@ -28,7 +28,7 @@ describe "Potter" do
     end
 
     it "answers the kata example" do
-      customer.buy_books(%w[ A A B B C C D E ], from_shop: shop, get_receipt_printed_to: paper)
+      customer.buy_books(%w[ A A B B C C D E ], from_shop: shop, get_receipt_printed_on: paper)
 
       paper.string.chomp.should be == -<<-RECEIPT
         A - 8
