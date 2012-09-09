@@ -23,27 +23,25 @@ describe "Potter" do
 
     it "answers the kata example" do
       # TODO: this should not be a message expectation
-      customer.should_receive(:your_price_to_pay_is).with(BigDecimal.new("52.20"))
+      customer.should_receive(:your_price_to_pay_is).with(BigDecimal.new("51.6"))
       customer.buy_books(%w[ A A B B C C D E ], from_shop: shop)
     end
 
     it "answers the kata example" do
       customer.buy_books(%w[ A A B B C C D E ], from_shop: shop, get_receipt_printed_on: paper)
 
-      puts paper.string
-
       paper.string.chomp.should be == -<<-RECEIPT
-        A - 8
-        A - 8
-        B - 8
-        B - 8
-        C - 8
-        C - 8
-        D - 8
-        E - 8
-        5 book set - -10
+        A - 8.0
+        A - 8.0
+        B - 8.0
+        B - 8.0
+        C - 8.0
+        C - 8.0
+        D - 8.0
+        E - 8.0
+        5 book set - -10.0
         3 book set - -2.4
-        Total: 52.20
+        Total: 51.6
       RECEIPT
     end
   end
